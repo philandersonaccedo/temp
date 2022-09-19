@@ -1,0 +1,2967 @@
+{
+    "name": "brightscript",
+    "displayName": "BrightScript Language",
+    "version": "2.35.2",
+    "publisher": "RokuCommunity",
+    "description": "Language support for Roku's BrightScript language.",
+    "author": {
+        "name": "Bronley Plumb",
+        "email": "bronley@gmail.com"
+    },
+    "icon": "images/logo.png",
+    "license": "MIT",
+    "keywords": [
+        "multi-root-ready"
+    ],
+    "engines": {
+        "vscode": "^1.53.0",
+        "node": "^12.12.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RokuCommunity/vscode-brightscript-language"
+    },
+    "bugs": {
+        "url": "https://github.com/RokuCommunity/vscode-brightscript-language/issues"
+    },
+    "scripts": {
+        "preversion": "npm run build && npm run lint && npm run test && npm run check-extraneous",
+        "vscode:prepublish": "npm run build",
+        "copy-schema": "cpx ./node_modules/brighterscript/bsconfig.schema.json ./dist -L",
+        "build": "npm run copy-schema && tsc -p ./ && npm run svelte-build",
+        "lint": "eslint \"./src/**/*.ts\"",
+        "watch": "npm run copy-schema && tsc -w -p ./",
+        "test": "nyc mocha \"src/**/*.spec.ts\" \"webviews/**/*.spec.ts\" --full-trace --bail",
+        "test:nocover": "mocha \"src/**/*.spec.ts\" \"webviews/**/*.spec.ts\" --full-trace",
+        "publish-coverage": "nyc report --reporter=text-lcov | coveralls",
+        "check-extraneous": "npm list --production --parseable --depth=99999",
+        "package": "vsce package",
+        "package-local": "node scripts/package-local.js",
+        "publish": "vsce publish",
+        "clean": "rimraf dist",
+        "install-local": "node scripts/install-local.js",
+        "install-pull-local": "node scripts/install-local.js --pull",
+        "uninstall-local": "node scripts/uninstall-local.js",
+        "build-docs": "statigen -s docs -o .tmp/docs",
+        "watch-docs": "npm run build-docs -- --watch",
+        "svelte-build": "cd ./webviews && rollup --config ./rollup.config.js && cd ..",
+        "svelte-watch": "cd ./webviews && rollup --config ./rollup.config.js --watch",
+        "releases": "ts-node scripts/releases.ts"
+    },
+    "dependencies": {
+        "@vscode/extension-telemetry": "^0.4.7",
+        "array-sort": "^1.0.0",
+        "backoff": "^2.5.0",
+        "brighterscript": "^0.57.2",
+        "brighterscript-formatter": "^1.6.16",
+        "chokidar": "^3.5.2",
+        "debounce": "^1.2.0",
+        "dotenv": "^6.2.0",
+        "fast-xml-parser": "^3.12.16",
+        "fs-extra": "^7.0.1",
+        "get-port": "^5.0.0",
+        "glob": "^7.1.3",
+        "hex-rgb": "^5.0.0",
+        "iconv-lite": "0.4.24",
+        "just-throttle": "^4.0.1",
+        "net": "^1.0.2",
+        "node-cache": "^4.2.0",
+        "node-ssdp": "^4.0.0",
+        "pretty-bytes": "^5.6.0",
+        "roku-debug": "^0.15.0",
+        "roku-deploy": "^3.8.1",
+        "roku-test-automation": "2.0.0-beta.5",
+        "semver": "^7.1.3",
+        "source-map": "^0.7.3",
+        "thenby": "^1.3.4",
+        "vscode-languageclient": "^7.0.0",
+        "vscode-uri": "^1.0.6"
+    },
+    "devDependencies": {
+        "@deboxsoft/cpx": "^1.5.0",
+        "@rollup/plugin-commonjs": "^16.0.0",
+        "@rollup/plugin-node-resolve": "^10.0.0",
+        "@rollup/plugin-typescript": "^6.0.0",
+        "@tsconfig/svelte": "^1.0.10",
+        "@types/backoff": "^2.5.2",
+        "@types/chai": "^4.1.5",
+        "@types/fs-extra": "^5.0.4",
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^12.12.0",
+        "@types/node-ssdp": "^3.3.0",
+        "@types/prompt": "^1.1.2",
+        "@types/semver": "^7.1.0",
+        "@types/sinon": "7.0.6",
+        "@types/vscode": "^1.53.0",
+        "@types/yargs": "^17.0.10",
+        "@typescript-eslint/eslint-plugin": "^5.14.0",
+        "@typescript-eslint/parser": "^5.14.0",
+        "@vscode/webview-ui-toolkit": "^1.0.0",
+        "chai": "^4.2.0",
+        "chalk": "^4.1.2",
+        "changelog-parser": "^2.8.0",
+        "coveralls": "^3.0.11",
+        "eslint": "^8.10.0",
+        "eslint-plugin-github": "^4.3.5",
+        "eslint-plugin-no-only-tests": "^2.6.0",
+        "latest-version": "^5.1.0",
+        "mocha": "^9.1.3",
+        "node-notifier": "^10.0.1",
+        "nyc": "^15.0.0",
+        "ovsx": "^0.5.1",
+        "prompt": "^1.3.0",
+        "rimraf": "^3.0.0",
+        "rollup": "^2.3.4",
+        "rollup-plugin-css-only": "^3.0.0",
+        "rollup-plugin-svelte": "^7.0.0",
+        "rollup-plugin-terser": "^7.0.0",
+        "sinon": "^7.2.3",
+        "source-map-support": "^0.5.21",
+        "statigen": "^0.4.4",
+        "svelte": "^3.49.0",
+        "svelte-codicons": "^0.7.1",
+        "svelte-preprocess": "^4.10.5",
+        "terminal-overwrite": "^2.0.1",
+        "ts-node": "^10.7.0",
+        "tslib": "^2.3.1",
+        "typescript": "^4.7.4",
+        "typescript-json-schema": "^0.50.1",
+        "undent": "^0.1.0",
+        "vsce": "^2.6.7",
+        "vscode-tmgrammar-test": "^0.0.11",
+        "yargs": "^16.2.0"
+    },
+    "optionalDependencies": {
+        "fsevents": "~2.3.2"
+    },
+    "main": "./dist/extension",
+    "browser": "./dist/extension-web",
+    "activationEvents": [
+        "onDebug",
+        "onLanguage:brightscript",
+        "onLanguage:brighterscript",
+        "onLanguage:xml",
+        "workspaceContains:**/manifest",
+        "workspaceContains:**/bsconfig.json",
+        "onView:onlineDevicesView",
+        "onCommand:extension.brightscript.refreshDeviceList",
+        "onCommand:extension.brightscript.sendRemoteCommand",
+        "onCommand:extension.brightscript.toggleRemoteControlMode",
+        "onCommand:extension.brightscript.enableRemoteControlMode",
+        "onCommand:extension.brightscript.disableRemoteControlMode",
+        "onCommand:extension.brightscript.pressBackButton",
+        "onCommand:extension.brightscript.pressHomeButton",
+        "onCommand:extension.brightscript.pressUpButton",
+        "onCommand:extension.brightscript.pressDownButton",
+        "onCommand:extension.brightscript.pressRightButton",
+        "onCommand:extension.brightscript.pressLeftButton",
+        "onCommand:extension.brightscript.pressSelectButton",
+        "onCommand:extension.brightscript.pressPlayButton",
+        "onCommand:extension.brightscript.pressRevButton",
+        "onCommand:extension.brightscript.pressFwdButton",
+        "onCommand:extension.brightscript.pressStarButton",
+        "onCommand:extension.brightscript.pressInstantReplayButton",
+        "onCommand:extension.brightscript.pressSearchButton",
+        "onCommand:extension.brightscript.pressEnterButton",
+        "onCommand:extension.brightscript.pressFindRemote",
+        "onCommand:extension.brightscript.pressVolumeDown",
+        "onCommand:extension.brightscript.pressVolumeMute",
+        "onCommand:extension.brightscript.pressVolumeUp",
+        "onCommand:extension.brightscript.pressPowerOff",
+        "onCommand:extension.brightscript.pressChannelUp",
+        "onCommand:extension.brightscript.pressChannelDown",
+        "onCommand:extension.brightscript.changeTvInput",
+        "onCommand:extension.brightscript.sendRemoteText",
+        "onCommand:brighterscript.showPreview",
+        "onCommand:brighterscript.showPreviewToSide"
+    ],
+    "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "vscode-brightscript-language",
+                    "title": "BrightScript Language",
+                    "icon": "images/icons/logo.svg"
+                }
+            ]
+        },
+        "views": {
+            "vscode-brightscript-language": [
+                {
+                    "id": "onlineDevicesView",
+                    "name": "Devices"
+                }
+            ],
+            "debug": [
+                {
+                    "id": "rendezvousView",
+                    "name": "Rendezvous",
+                    "when": "debugType == 'brightscript'"
+                },
+                {
+                    "id": "sceneGraphInspectorView",
+                    "name": "SceneGraph Inspector",
+                    "type": "webview",
+                    "when": "debugType == 'brightscript'"
+                },
+                {
+                    "id": "rokuRegistryView",
+                    "name": "Roku Registry",
+                    "type": "webview",
+                    "when": "debugType == 'brightscript'"
+                },
+                {
+                    "id": "rokuCommandsView",
+                    "name": "Roku Commands",
+                    "type": "webview",
+                    "when": "debugType == 'brightscript'"
+                }
+            ]
+        },
+        "menus": {
+            "editor/title": [
+                {
+                    "when": "editorLangId == brighterscript && resourceScheme == file",
+                    "command": "brighterscript.showPreviewToSide",
+                    "group": "navigation"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "extension.brightscript.rendezvous.toggleSortMethod",
+                    "when": "debugType == 'brightscript' && view == rendezvousView",
+                    "group": "Rendezvous"
+                },
+                {
+                    "command": "extension.brightscript.rendezvous.toggleSortDirection",
+                    "when": "debugType == 'brightscript' && view == rendezvousView",
+                    "group": "Rendezvous"
+                },
+                {
+                    "command": "extension.brightscript.rendezvous.clearHistory",
+                    "when": "debugType == 'brightscript' && view == rendezvousView",
+                    "group": "Rendezvous"
+                },
+                {
+                    "command": "extension.brightscript.refreshDeviceList",
+                    "when": "view == onlineDevicesView",
+                    "group": "navigation"
+                }
+            ],
+            "commandPalette": []
+        },
+        "breakpoints": [
+            {
+                "language": "brightscript"
+            },
+            {
+                "language": "brighterscript"
+            }
+        ],
+        "debuggers": [
+            {
+                "label": "BrightScript Debug",
+                "type": "brightscript",
+                "program": "./dist/debugAdapter.js",
+                "runtime": "node",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [],
+                        "properties": {
+                            "host": {
+                                "type": "string",
+                                "description": "The host or ip address for the target Roku",
+                                "default": "${promptForHost}"
+                            },
+                            "deepLinkUrl": {
+                                "type": "string",
+                                "description": "A full deep link url to start the debugging session. There's no pretty way of launching directly to a deep link, so the app must be side-loaded, it auto-runs, we stop the app, and then launch it again using the deep link. You may use ${promptForHost}, ${host}, ${promptForQueryParams} which only asks for the URL-encoded querystring, and ${promptForDeepLinkUrl} to enter the entire deep link url at launch-time.",
+                                "default": "http://${host}:8060/launch/dev?${promptForQueryParams}"
+                            },
+                            "password": {
+                                "type": "string",
+                                "description": "The password for the developer page on the target Roku",
+                                "default": "${promptForPassword}"
+                            },
+                            "rootDir": {
+                                "type": "string",
+                                "description": "The root directory that contains your Roku project. This path should point to the folder containing your manifest file",
+                                "default": "${workspaceFolder}"
+                            },
+                            "debugRootDir": {
+                                "type": "string",
+                                "deprecationMessage": "Deprecated. Use sourceDirs instead",
+                                "description": "If you have a build system, rootDir will point to the build output folder, and this path should point to the actual source folder so that breakpoints can be set in the source files when debugging. In order for this to work, your build process cannot change line offsets between source files and built files, otherwise debugger lines will be out of sync.",
+                                "default": "${workspaceFolder}"
+                            },
+                            "sourceDirs": {
+                                "type": "array",
+                                "description": "If you have a build system, this array will point to paths of actual source folders so that breakpoints can be set in the source files when debugging. In order for this to work, your build process cannot change line offsets between source files and built files, otherwise, debugger lines will be out of sync.",
+                                "default": [
+                                    "${workspaceFolder}"
+                                ]
+                            },
+                            "bsConst": {
+                                "type": "object",
+                                "description": "An object of bs_const values to be updated in the manifest before side loading.",
+                                "patternProperties": {
+                                    "^[\\w]+$": {
+                                        "type": "boolean",
+                                        "required": true
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "componentLibrariesPort": {
+                                "type": "number",
+                                "description": "Port to access component libraries.",
+                                "default": 8080
+                            },
+                            "componentLibrariesOutDir": {
+                                "type": "string",
+                                "deprecationMessage": "This no longer user-configurable. This value will be set to \"${outDir}/component-libraries\" by the extension.",
+                                "default": ""
+                            },
+                            "componentLibraries": {
+                                "type": "array",
+                                "description": "An array of file path sets. One for each component library. Each index is an array of file paths, file globs. This will override the defaults, so if specified, you must provide ALL files. See https://npmjs.com/roku-deploy for examples. You must specify a componentLibrariesOutDir to use this.",
+                                "default": [
+                                    {
+                                        "rootDir": "${workspaceFolder}/LibDir/",
+                                        "outFile": "LibName.zip",
+                                        "files": [
+                                            "manifest",
+                                            "source/**/*.*",
+                                            "components/**/*.*",
+                                            "images/**/*.*"
+                                        ]
+                                    }
+                                ],
+                                "items": {
+                                    "type": "object",
+                                    "description": "Component Library Schema.",
+                                    "default": {
+                                        "rootDir": "${workspaceFolder}/LibDir/",
+                                        "outFile": "LibName.zip",
+                                        "files": [
+                                            "manifest",
+                                            "source/**/*.*",
+                                            "components/**/*.*",
+                                            "images/**/*.*"
+                                        ]
+                                    },
+                                    "required": [
+                                        "rootDir",
+                                        "outFile",
+                                        "files"
+                                    ],
+                                    "properties": {
+                                        "rootDir": {
+                                            "type": "string",
+                                            "description": "Root directory of source files for this component library.",
+                                            "examples": [
+                                                "${workspaceFolder}/LibDir/"
+                                            ]
+                                        },
+                                        "outFile": {
+                                            "type": "string",
+                                            "description": "A file name and extension used as the static file name for the zip. You can use manifest values in this property such as ${title} to be inferred from the library's manifest file.",
+                                            "default": "",
+                                            "examples": [
+                                                "LibName.zip"
+                                            ],
+                                            "pattern": "^(.*)(\\.zip)$"
+                                        },
+                                        "files": {
+                                            "type": "array",
+                                            "description": "A file path or file glob that should be copied to the  component library zip.",
+                                            "default": [
+                                                "manifest",
+                                                "source/**/*.*",
+                                                "components/**/*.*",
+                                                "assets/**/*.*"
+                                            ],
+                                            "items": {
+                                                "anyOf": [
+                                                    {
+                                                        "type": "string",
+                                                        "description": "A file path or file glob that should be copied to the component library zip."
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "src": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "type": "string",
+                                                                        "description": "A file path or glob pattern of source file(s) to be included in the  component library zip."
+                                                                    },
+                                                                    {
+                                                                        "type": "array",
+                                                                        "description": "An array of file path or globs",
+                                                                        "items": {
+                                                                            "type": "string",
+                                                                            "description": "A file path or glob pattern of source file(s) to be included in the  component library zip."
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "dest": {
+                                                                "type": "string",
+                                                                "description": "The destination for the file(s) found in 'src'. If this path is a directory, you must end it in a trailing slash"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "src",
+                                                            "dest"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "sourceDirs": {
+                                            "type": "array",
+                                            "description": "If you have a build system, this array will point to paths of actual source folders so that breakpoints can be set in the source files when debugging. In order for this to work, your build process cannot change line offsets between source files and built files, otherwise, debugger lines will be out of sync.",
+                                            "default": [
+                                                "${workspaceFolder}"
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "autoRunSgDebugCommands": {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string",
+                                            "description": "Enables running the 'chanperf' command with a 1 second reporting interval at the start of a debug session.",
+                                            "enum": [
+                                                "chanperf"
+                                            ]
+                                        },
+                                        {
+                                            "type": "string",
+                                            "description": "Enables running of the 'fps_display 1' command at the start of a debug session.",
+                                            "enum": [
+                                                "fpsdisplay"
+                                            ]
+                                        },
+                                        {
+                                            "type": "string",
+                                            "description": "Enables running of the 'logrendezvous on' command at the start of a debug session.",
+                                            "enum": [
+                                                "logrendezvous"
+                                            ]
+                                        },
+                                        {
+                                            "type": "string",
+                                            "description": "Custom SGDebug command that will be run on port 8080"
+                                        }
+                                    ]
+                                }
+                            },
+                            "outDir": {
+                                "type": "string",
+                                "description": "The folder where the the build artifacts are placed (like the staging folder and .zip files of the apps)",
+                                "default": "${workspaceFolder}/out"
+                            },
+                            "stopOnEntry": {
+                                "type": "boolean",
+                                "description": "Should the debugger stop on the first line of the program after launch.",
+                                "default": false
+                            },
+                            "retainStagingFolder": {
+                                "type": "boolean",
+                                "description": "Prevent the staging folder from being deleted after the deployment package is created.  This is helpful for troubleshooting why your package isn't being created the way you expected.",
+                                "default": false
+                            },
+                            "retainDeploymentArchive": {
+                                "type": "boolean",
+                                "description": "Prevent the deployment package from being deleted after launching a debug session.",
+                                "default": true
+                            },
+                            "enableVariablesPanel": {
+                                "type": "boolean",
+                                "description": "Enables automatic population of the debug variable panel on a breakpoint or runtime errors.",
+                                "default": true
+                            },
+                            "envFile": {
+                                "type": "string",
+                                "description": "A path to an environment variables file.",
+                                "default": ".env"
+                            },
+                            "consoleOutput": {
+                                "type": "string",
+                                "description": "Determines which console output event to listen for. 'full' is every console message (including the ones from the adapter). 'normal' excludes output initiated by the adapter and rendezvous logs if enabled on the device.",
+                                "default": "normal",
+                                "enum": [
+                                    "full",
+                                    "normal"
+                                ]
+                            },
+                            "raleTrackerTaskFileLocation": {
+                                "type": "string",
+                                "description": "This is an absolute path to the TrackerTask.xml file to be injected into your Roku channel during a debug session.",
+                                "scope": "resource"
+                            },
+                            "injectRaleTrackerTask": {
+                                "type": "boolean",
+                                "description": "Will inject the Roku Advanced Layout Editor(RALE) TrackerTask into your channel if one is defined in your user settings.",
+                                "default": false
+                            },
+                            "injectRdbOnDeviceComponent": {
+                                "type": "boolean",
+                                "description": "Will inject the OnDeviceComponent used by RDB for RALE like functionality inside of the extension",
+                                "default": false
+                            },
+                            "disableScreenSaver": {
+                                "type": "boolean",
+                                "description": "If injectRdbOnDeviceComponent is true and this is true the screen saver will be be disabled while the deployed application is running.",
+                                "default": true
+                            },
+                            "rdbCallbackPort": {
+                                "type": "number",
+                                "description": "By default the OnDeviceComponent tries to find an open callback port on the server. This allows you to set one explicitly"
+                            },
+                            "files": {
+                                "type": "array",
+                                "description": "An array of file paths, file globs, or {src:string;dest:string} objects that will be copied into the deployment package. This will override the defaults, so if specified, you must provide ALL files. See https://npmjs.com/roku-deploy for examples.",
+                                "default": [
+                                    "manifest",
+                                    "source/**/*.*",
+                                    "components/**/*.*",
+                                    "images/**/*.*"
+                                ],
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string",
+                                            "description": "A file path or file glob that should be copied to the deployment package."
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "src": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string",
+                                                            "description": "A file path or glob pattern of source file(s) to be included in the deployment package"
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "description": "An array of file path or globs",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "description": "A file path or glob pattern of source file(s) to be included in the deployment package"
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "dest": {
+                                                    "type": "string",
+                                                    "description": "The destination for the file(s) found in 'src'. If this path is a directory, you must end it in a trailing slash"
+                                                }
+                                            },
+                                            "required": [
+                                                "src",
+                                                "dest"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            },
+                            "enableDebuggerAutoRecovery": {
+                                "type": "boolean",
+                                "description": "Enables automatic continue when hitting an incorrect 'break in' breakpoint, which are produced by a bug in the roku microdebugger, mishandling multiple runloops. This flag will enable you to recover in most cases - wait until the skipping bogus breakpoint messages have all stopped before continuing to use your app, for best results.",
+                                "default": true
+                            },
+                            "stopDebuggerOnAppExit": {
+                                "type": "boolean",
+                                "description": "If true, will terminate the debug session if app exit is detected. This currently relies on 9.1+ launch beacon notifications, so will not work on a pre 9.1 device.",
+                                "default": true
+                            },
+                            "enableSourceMaps": {
+                                "type": "boolean",
+                                "default": true,
+                                "description": "If true, the debugger will read any available sourcemaps and attempt to convert debugger locations into their original source locations.",
+                                "scope": "resource"
+                            },
+                            "packagePort": {
+                                "type": "number",
+                                "description": "The port used for package-related requests. This is mainly used for things like emulators, or when your roku is behind a firewall with a port-forward.",
+                                "default": 80
+                            },
+                            "remotePort": {
+                                "type": "number",
+                                "description": "The port used for sending remote control commands (like home press or back press). This is mainly used for things like emulators, or when your roku is behind a firewall with a port-forward.",
+                                "default": 8060
+                            },
+                            "logfilePath": {
+                                "type": "string",
+                                "description": "A path to a file where all brightscript console output will be written. If null or empty, file logging will be disabled.",
+                                "scope": "resource"
+                            },
+                            "enableDebugProtocol": {
+                                "type": "boolean",
+                                "default": false,
+                                "description": "If true, the debugger will use the new BrightScript debug protocol, and will disable the telnet debugger. See this link for more details: https://developer.roku.com/en-ca/docs/developer-program/debugging/socket-based-debugger.md",
+                                "scope": "resource"
+                            },
+                            "logLevel": {
+                                "type": "string",
+                                "enum": [
+                                    "off",
+                                    "error",
+                                    "warn",
+                                    "log",
+                                    "info",
+                                    "debug",
+                                    "trace"
+                                ],
+                                "default": "log",
+                                "description": "The level of logging that should be done during a debug session."
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "name": "BrightScript Debug: Launch",
+                        "type": "brightscript",
+                        "request": "launch",
+                        "host": "${promptForHost}",
+                        "password": "${promptForPassword}",
+                        "rootDir": "${workspaceFolder}"
+                    }
+                ],
+                "configurationSnippets": [
+                    {
+                        "label": "BrightScript Debug: Launch",
+                        "description": "Package, deploy and debug a BrightScript project on a remote Roku device",
+                        "body": {
+                            "name": "BrightScript Debug: Launch",
+                            "type": "brightscript",
+                            "request": "launch",
+                            "host": "^\"\\${promptForHost}\"",
+                            "password": "^\"\\${promptForPassword}\"",
+                            "rootDir": "^\"\\${workspaceFolder}\""
+                        }
+                    }
+                ]
+            }
+        ],
+        "languages": [
+            {
+                "id": "jsonc",
+                "filenamePatterns": [
+                    "bsconfig.json",
+                    "*bsconfig.json",
+                    "brsconfig.json",
+                    "*brsconfig.json"
+                ]
+            },
+            {
+                "id": "brightscript",
+                "extensions": [
+                    ".brs"
+                ],
+                "aliases": [
+                    "BrightScript"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./images/icons/brightscript.svg",
+                    "dark": "./images/icons/brightscript.svg"
+                }
+            },
+            {
+                "id": "brighterscript",
+                "extensions": [
+                    ".bs"
+                ],
+                "aliases": [
+                    "BrighterScript"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./images/icons/brighterscript.svg",
+                    "dark": "./images/icons/brighterscript.svg"
+                }
+            },
+            {
+                "id": "Log",
+                "aliases": [
+                    "log"
+                ],
+                "extensions": [
+                    ".log"
+                ],
+                "configuration": "./log.configuration.json",
+                "mimetypes": [
+                    "log",
+                    "text/log",
+                    "text/x-log",
+                    "text/x-code-output",
+                    "x-code-output"
+                ]
+            }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "*bsconfig.json",
+                "url": "./dist/bsconfig.schema.json"
+            },
+            {
+                "fileMatch": "*brsconfig.json",
+                "url": "./dist/bsconfig.schema.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "brightscript",
+                "scopeName": "source.brs",
+                "path": "./syntaxes/brightscript.tmLanguage.json"
+            },
+            {
+                "language": "brighterscript",
+                "scopeName": "source.brs",
+                "path": "./syntaxes/brightscript.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "brightscript",
+                "path": "./snippets/brightscript.json"
+            },
+            {
+                "language": "brighterscript",
+                "path": "./snippets/brightscript.json"
+            },
+            {
+                "language": "brighterscript",
+                "path": "./snippets/brighterscript.json"
+            },
+            {
+                "language": "xml",
+                "path": "./snippets/xml.json"
+            }
+        ],
+        "configuration": [
+            {
+                "id": "formatting",
+                "title": "Formatting",
+                "properties": {
+                    "brightscript.format.formatIndent": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If true, lines are indented based on what they are nested inside of. If false, all leading whitespace is left alone.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.keywordCase": {
+                        "type": "string",
+                        "enum": [
+                            "lower",
+                            "upper",
+                            "title",
+                            "original"
+                        ],
+                        "default": "lower",
+                        "description": "Replaces all keywords with the upper or lower case settings specified. `\"original\"` means they are not modified at all.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.typeCase": {
+                        "type": "string",
+                        "enum": [
+                            "lower",
+                            "upper",
+                            "title",
+                            "original"
+                        ],
+                        "default": "lower",
+                        "description": "Replaces all type keywords with the upper or lower case settings specified. `\"original\"` means they are not modified at all.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.compositeKeywords": {
+                        "type": "string",
+                        "enum": [
+                            "split",
+                            "combine",
+                            "original"
+                        ],
+                        "default": "split",
+                        "description": "Forces all composite keywords (i.e. 'elseif', 'endwhile', etc...) to be consistent. If 'split', they are split into their alternatives ('else if', 'end while'). If 'combine', they are combined ('elseif', 'endwhile'). If null, they are not modified.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.removeTrailingWhiteSpace": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Removes all trailing whitespace at the end of each line.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "if true, ensure exactly 1 space after leading and before trailing curly braces. If false, REMOVE all whitespace after leading and before trailing curly braces (excluding beginning-of-line indentation spacing)",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.formatMultiLineObjectsAndArrays": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "if true, insert newlines and indents for multi-line objects and arrays.",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.keywordCaseOverride": {
+                        "type": "object",
+                        "description": "Allows overriding case at the individual keyword level.\nExample {\"string\": \"title\"} would make string always lower case regardless of keywordCase",
+                        "properties": {
+                            "endfunction": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endif": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endsub": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endwhile": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "exitwhile": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "exitfor": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endfor": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "elseif": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "#elseif": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "#endif": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endclass": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "endnamespace": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "and": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "eval": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "if": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "then": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "else": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "for": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "to": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "step": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "exit": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "each": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "while": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "function": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "sub": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "as": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "return": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "print": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "goto": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "dim": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "stop": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "void": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "boolean": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "integer": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "longinteger": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "float": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "double": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "string": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "object": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "interface": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "invalid": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "dynamic": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "or": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "let": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "next": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "not": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "#if": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "#else": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "#const": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "class": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "namespace": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "import": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            }
+                        },
+                        "scope": "resource"
+                    },
+                    "brightscript.format.typeCaseOverride": {
+                        "type": "object",
+                        "description": " Provides a way to override type keyword case at the individual TokenType level. Types are defined as keywords that are preceeded by an `as` token.",
+                        "properties": {
+                            "boolean": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "double": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "dynamic": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "float": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "function": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "integer": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "invalid": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "longinteger": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "object": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "string": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            },
+                            "void": {
+                                "type": "string",
+                                "enum": [
+                                    "lower",
+                                    "upper",
+                                    "title",
+                                    "original"
+                                ]
+                            }
+                        }
+                    },
+                    "brightscript.format.formatInteriorWhitespace": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If true, all whitespace between items is reduced to exactly 1 space character,and certain keywords and operators are padded with whitespace (i.e. `1+1` becomes `1 + 1`)",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.insertSpaceBeforeFunctionParenthesis": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If true, a space is inserted to the left of an opening function declaration parenthesis. (i.e. `function main ()` or `function ()`). If false, all spacing is removed (i.e. `function main()` or `function()`).",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.insertSpaceBetweenEmptyCurlyBraces": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If true, empty curly braces will contain exactly 1 whitespace char (i.e. `{ }`). If false, there will be zero whitespace chars between empty curly braces (i.e. `{}`)",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.insertSpaceBetweenAssociativeArrayLiteralKeyAndColon": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If true, ensure exactly 1 space between an associative array literal key and its colon. If false, all space between the key and its colon will be removed",
+                        "scope": "resource"
+                    },
+                    "brightscript.format.formatSingleLineCommentType": {
+                        "type": "string",
+                        "description": "Forces all single-line comments to use the same style",
+                        "enum": [
+                            "singlequote",
+                            "rem",
+                            "original"
+                        ],
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "projectSettings",
+                "title": "Project Settings",
+                "properties": {
+                    "brightscript.configFile": {
+                        "type": "string",
+                        "description": "Path to the bsconfig.json for this project. This is an absolute path, or a path relative to ${workspaceFolder}.",
+                        "scope": "resource"
+                    },
+                    "brightscript.bsdk": {
+                        "type": "string",
+                        "description": "Path to the BrighterScript module to use for the BrightScript and BrighterScript language features",
+                        "scope": "resource"
+                    },
+                    "brightscript.enableLanguageServer": {
+                        "type": "boolean",
+                        "description": "Enable the Language Server, which includes things like syntax checking, intellisense, completions, etc.",
+                        "default": true,
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "debugLogging",
+                "title": "Debug Logging",
+                "properties": {
+                    "brightscript.output.clearConsoleOnChannelStart": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, will clear the  brightscript log after connecting to the Roku channel after launching.",
+                        "scope": "resource"
+                    },
+                    "brightscript.output.clearOnLaunch": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, will clear the brightscript log when launching.",
+                        "scope": "resource"
+                    },
+                    "brightscript.output.focusOnLaunch": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, focus on the brightscript log when launching, which is convenient for controlling your roku with the extension's remote control keys.",
+                        "scope": "resource"
+                    },
+                    "brightscript.output.hyperlinkFormat": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "Full",
+                            "Filename",
+                            "FilenameAndFunction",
+                            "Short",
+                            "Hidden"
+                        ],
+                        "default": "FilenameAndFunction",
+                        "description": "Determines the format of roku hyperlinks in the output panel. For example, given pkg:/components/KeyLogTester.brs(24:0)  The hyperlink will appear as follows: \n (Full) pkg:/components/KeyLogTester.brs(24:0) [INFO] retrieving videos for category id 23 \n (Filename) KeyLogTester.brs(24) [INFO] retrieving videos for category id 23 \n (FilenameAndFunction) KeyLogTester.getVideos(24) [INFO] retrieving videos for category id 23 \n (Short) #1 [INFO] retrieving videos for category id 23 \n (Hidden) [INFO] retrieving videos for category id 23",
+                        "scope": "resource"
+                    },
+                    "brightscript.output.includeStackTraces": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, will print stack trace or breakpoint info in the log output. Set to false to avoid noisy logs - you'll still get the traces in the debug console, in any case.",
+                        "scope": "resource"
+                    },
+                    "brightscript.outputPanelStartupBehavior": {
+                        "type": "string",
+                        "description": "Used to configure if the 'BrightScript Log' output channel will be shown, shown and be focused, or nothing happens as soon as this extension is initialized",
+                        "enum": [
+                            "show",
+                            "focus",
+                            "nothing"
+                        ],
+                        "default": "nothing",
+                        "scope": "resource"
+                    },
+                    "brightscript.focusOutputPanelOnStartup": {
+                        "type": "boolean",
+                        "description": "If enabled, the 'BrightScript Log' output channel will be focused as soon as this extension is initialized",
+                        "deprecationMessage": "Deprecated. Use 'outputPanelStartupBehavior' instead",
+                        "default": false,
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "deviceDiscovery",
+                "title": "Device Discovery",
+                "properties": {
+                    "brightscript.deviceDiscovery.showInfoMessages": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, an info toast will be shown when a Roku device has been found on the network.",
+                        "scope": "resource"
+                    },
+                    "brightscript.deviceDiscovery.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If set to true, the extension will automatically watch and scan the network for online Roku devices. This can be pared with the ${promptForHost} option in the launch config to display a list of online Rokus, removing the need to constantly change the host IP in your config files.",
+                        "scope": "resource"
+                    },
+                    "brightscript.deviceDiscovery.includeNonDeveloperDevices": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If set to true, the extension will also include devices that do not have their developer mode enabled that are found on the network.",
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "debug",
+                "title": "Debugging",
+                "properties": {
+                    "brightscript.debug.raleTrackerTaskFileLocation": {
+                        "type": "string",
+                        "description": "This is an absolute path to the TrackerTask.xml file to be injected into your Roku channel during a debug session.",
+                        "scope": "resource"
+                    },
+                    "brightscript.debug.autoRunSgDebugCommands": {
+                        "type": "array",
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "description": "Enables running the 'chanperf' command with a 1 second reporting interval at the start of a debug session.",
+                                    "enum": [
+                                        "chanperf"
+                                    ]
+                                },
+                                {
+                                    "type": "string",
+                                    "description": "Enables running of the 'fps_display 1' command at the start of a debug session.",
+                                    "enum": [
+                                        "fpsdisplay"
+                                    ]
+                                },
+                                {
+                                    "type": "string",
+                                    "description": "Enables running of the 'logrendezvous on' command at the start of a debug session.",
+                                    "enum": [
+                                        "logrendezvous"
+                                    ]
+                                },
+                                {
+                                    "type": "string",
+                                    "description": "Custom SGDebug command that will be run on port 8080"
+                                }
+                            ]
+                        }
+                    },
+                    "brightscript.debug.enableDebugProtocol": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If true, the debugger will use the new BrightScript debug protocol, and will disable the telnet debugger. See this link for more details: https://developer.roku.com/en-ca/docs/developer-program/debugging/socket-based-debugger.md",
+                        "scope": "resource"
+                    },
+                    "brightscript.debug.enableSourceMaps": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If true, the debugger will read any available sourcemaps and attempt to convert debugger locations into their original source locations.",
+                        "scope": "resource"
+                    },
+                    "brightscript.debug.logfilePath": {
+                        "type": "string",
+                        "description": "A path to a file where all brightscript console output will be written. If null or empty, file logging will be disabled.",
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "deviceControl",
+                "title": "Device Control (ECP)",
+                "properties": {
+                    "brightscript.remoteControl.host": {
+                        "type": "string",
+                        "default": "${promptForHost}",
+                        "description": "IP address of the roku to remotely control",
+                        "scope": "resource"
+                    },
+                    "brightscript.sendRemoteTextHistory.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "If true, the extension will not save the history for 'extension.brightscript.sendRemoteText' commands",
+                        "scope": "resource"
+                    },
+                    "brightscript.sendRemoteTextHistory.limit": {
+                        "type": "number",
+                        "default": 30,
+                        "description": "Sets the maximum number of 'extension.brightscript.sendRemoteText' commands to remember for future use",
+                        "scope": "application"
+                    },
+                    "brightscript.remoteControlMode.enableActiveAnimation": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Enables or disables visual animations related to the remote control mode button",
+                        "scope": "resource"
+                    }
+                }
+            },
+            {
+                "id": "miscellaneous",
+                "title": "Miscellaneous",
+                "properties": {
+                    "brightscript.extensionLogfilePath": {
+                        "type": "string",
+                        "description": "File where the 'BrightScript Extension' output panel (i.e. debug logs for the extension) will be appended. If omitted, no file logging will be done. ${workspaceFolder} is supported and will point to the first workspace found.",
+                        "scope": "resource"
+                    }
+                }
+            }
+        ],
+        "commands": [
+            {
+                "command": "extension.brightscript.showReleaseNotes",
+                "title": "Show Release Notes",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.bsprofPause",
+                "title": "bsprof-pause - Pause BS profiling",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.bsprofResume",
+                "title": "bsprof-resume - Resume BS profiling",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.bsprofStatus",
+                "title": "bsprof-status - Get BS profiling status",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.chanperf",
+                "title": "chanperf - Show channel CPU and memory usage",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.chanperfChangeInterval",
+                "title": "chanperf - Change how often to show channel CPU and memory usage",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.clearLaunchCaches",
+                "title": "clear_launch_caches - Clear all caches that can affect channel launch time",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.fpsDisplay",
+                "title": "fps_display - Display onscreen graphics statistics",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.free",
+                "title": "free - Return the output of the free(1) command",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.genkey",
+                "title": "genkey - Generate a new developer key",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.loadedTextures",
+                "title": "loaded_textures - Show loaded textures",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.logrendezvous",
+                "title": "logrendezvous - Turn Rendezvous Logging on or off",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.plugins",
+                "title": "plugins - Show list of all installed plugins",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.r2d2bitmaps",
+                "title": "r2d2_bitmaps - Enumerate R2D2 bitmaps",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.removePlugin",
+                "title": "remove_plugin - Remove a plugin from the account and device",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgnodesAll",
+                "title": "sgnodes all - Logs every existing node created by the currently running channel",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgnodesRoots",
+                "title": "sgnodes roots - Logs every existing node without a parent created by the currently running channel",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgnodesNodeId",
+                "title": "sgnodes node_ID - Logs node(s) with an id field matching the supplied node_ID",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgperfStart",
+                "title": "sgperf start - Enables tracking of basic node operation performance metrics",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgperfStop",
+                "title": "sgperf stop - Disabled tracking of basic node operation performance metrics",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgperfClear",
+                "title": "sgperf clear - Resets basic node operation performance metrics",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.sgperfReport",
+                "title": "sgperf report - Logs the current node operation performance metrics",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.showkey",
+                "title": "showkey - Show the current developer key.",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.press",
+                "title": "press - Simulate a list of keypress'",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.custom8080Command",
+                "title": "custom - Enter any command string to be run on port 8080'",
+                "category": "Brightscript Debug"
+            },
+            {
+                "command": "extension.brightscript.clearGlobalState",
+                "title": "Clear Global State",
+                "description": "Clear the BrightScript extension's global state.",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.toggleXML",
+                "title": "Toggle XML/BRS",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.sendRemoteCommand",
+                "title": "Send 'arg' button key press to Roku as a remote control",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.clearLogOutput",
+                "title": "Clear the brightscript log output",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.toggleRemoteControlMode",
+                "title": "Toggle remote control mode",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.enableRemoteControlMode",
+                "title": "Enable remote control mode",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.disableRemoteControlMode",
+                "title": "Disable remote control mode",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressBackButton",
+                "title": "Press the Back button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressBackspaceButton",
+                "title": "Press the Backspace button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressHomeButton",
+                "title": "Press the Home button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressUpButton",
+                "title": "Press the Up button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressDownButton",
+                "title": "Press the Down button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressRightButton",
+                "title": "Press the Right button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressLeftButton",
+                "title": "Press the Left button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressSelectButton",
+                "title": "Press the Select button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressPlayButton",
+                "title": "Press the Play button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressRevButton",
+                "title": "Press the Rev button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressFwdButton",
+                "title": "Press the Fwd button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressStarButton",
+                "title": "Press the Star button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressInstantReplayButton",
+                "title": "Press the Instant Replay button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressSearchButton",
+                "title": "Press the Search button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressEnterButton",
+                "title": "Press the Enter button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressFindRemote",
+                "title": "Press the FindRemote button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressVolumeDown",
+                "title": "Press the VolumeDown button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressVolumeMute",
+                "title": "Press the VolumeMute button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressVolumeUp",
+                "title": "Press the VolumeUp button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressPowerOff",
+                "title": "Press the PowerOff button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressChannelUp",
+                "title": "Press the ChannelUp button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.pressChannelDown",
+                "title": "Press the ChannelDown button on the Roku remote",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.changeTvInput",
+                "title": "Provides a list of possible inputs to change to",
+                "shortTitle": "Change TV Input",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.sendRemoteText",
+                "title": "Send text characters to the Roku Device",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.markLogOutput",
+                "title": "Mark Log Output",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.clearLogOutput",
+                "title": "Clear Log Output",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.setOutputIncludeFilter",
+                "title": "Set Log Output Include Filter",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.setOutputLogLevelFilter",
+                "title": "Set Log Output Level Filter",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.setOutputExcludeFilter",
+                "title": "Set Log Output Exclude Filter",
+                "category": "Brightscript"
+            },
+            {
+                "command": "extension.brightscript.rendezvous.toggleSortMethod",
+                "title": "Toggle Sorting Method (smart > alphabetic)",
+                "category": "Brightscript Rendezvous",
+                "enablement": "debugType == 'brightscript'"
+            },
+            {
+                "command": "extension.brightscript.rendezvous.toggleSortDirection",
+                "title": "Toggle Asc - Desc Sorting ",
+                "category": "Brightscript Rendezvous",
+                "enablement": "debugType == 'brightscript'"
+            },
+            {
+                "command": "extension.brightscript.rendezvous.clearHistory",
+                "title": "Clear History",
+                "category": "Brightscript Rendezvous",
+                "enablement": "debugType == 'brightscript'"
+            },
+            {
+                "command": "brighterscript.showPreview",
+                "title": "Preview Transpiled code",
+                "category": "BrighterScript"
+            },
+            {
+                "command": "brighterscript.showPreviewToSide",
+                "title": "Preview Transpiled code to the Side",
+                "category": "BrighterScript",
+                "icon": {
+                    "light": "./images/icons/preview-right-light.svg",
+                    "dark": "./images/icons/preview-right-dark.svg"
+                }
+            },
+            {
+                "command": "extension.brightscript.refreshDeviceList",
+                "title": "Refresh",
+                "category": "BrighterScript",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "extension.brightscript.languageServer.restart",
+                "title": "Restart Language Server",
+                "category": "BrightScript",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "extension.brightscript.languageServer.info",
+                "title": "View BrighterScript LanguageServer Info",
+                "category": "BrightScript"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "brighterscript.showPreview",
+                "key": "Ctrl+Shift+v",
+                "when": "editorLangId == brighterscript"
+            },
+            {
+                "command": "extension.brightscript.pressBackButton",
+                "key": "Escape",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressBackButton",
+                "key": "Delete",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Ctrl+Delete",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Delete",
+                "mac": "Option+Delete",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Delete",
+                "mac": "Cmd+Delete",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressHomeButton",
+                "key": "Home",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressHomeButton",
+                "key": "Shift+Escape",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressHomeButton",
+                "key": "Ctrl+Escape",
+                "mac": "Cmd+Escape",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressInstantReplayButton",
+                "key": "Backspace",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressBackspaceButton",
+                "key": "Ctrl+Backspace",
+                "mac": "Cmd+Backspace",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Backspace",
+                "mac": "Option+Backspace",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Backspace",
+                "mac": "Ctrl+Backspace",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressUpButton",
+                "key": "Up",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Ctrl+Up",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Up",
+                "mac": "Option+Up",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Up",
+                "mac": "Cmd+Up",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressDownButton",
+                "key": "Down",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Ctrl+Down",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Down",
+                "mac": "Option+Down",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Down",
+                "mac": "Cmd+Down",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressRightButton",
+                "key": "Right",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressLeftButton",
+                "key": "Left",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressSelectButton",
+                "key": "Enter",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressPlayButton",
+                "key": "Ctrl+Enter",
+                "mac": "Cmd+Enter",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressPlayButton",
+                "key": "End",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Enter",
+                "mac": "Option+Enter",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Enter",
+                "mac": "Ctrl+Enter",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressPlayButton",
+                "key": "MediaPlayPause",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressRevButton",
+                "key": "Ctrl+Left",
+                "mac": "Cmd+Left",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Left",
+                "mac": "Option+Left",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Left",
+                "mac": "Ctrl+Left",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressRevButton",
+                "key": "PageDown",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressRevButton",
+                "key": "MediaTrackPrevious",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressFwdButton",
+                "key": "Ctrl+Right",
+                "mac": "Cmd+Right",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Alt+Right",
+                "mac": "Option+Right",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.doNothing",
+                "key": "Win+Right",
+                "mac": "Ctrl+Right",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressFwdButton",
+                "key": "PageUp",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressFwdButton",
+                "key": "MediaTrackNext",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressStarButton",
+                "key": "Ctrl+8",
+                "mac": "Cmd+8",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressStarButton",
+                "key": "Ctrl+Shift+8",
+                "mac": "Cmd+Shift+8",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.pressStarButton",
+                "key": "Insert",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.toggleRemoteControlMode",
+                "key": "Ctrl+k",
+                "mac": "Cmd+k"
+            },
+            {
+                "command": "extension.brightscript.pressVolumeMute",
+                "key": "AudioVolumeMute",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+SPACE",
+                "key": "Space",
+                "args": " ",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+TAB",
+                "key": "Tab",
+                "args": "\t",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+!",
+                "key": "Shift+1",
+                "args": "!",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+@",
+                "key": "Shift+2",
+                "args": "@",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+#",
+                "key": "Shift+3",
+                "args": "#",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+$",
+                "key": "Shift+4",
+                "args": "$",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+%",
+                "key": "Shift+5",
+                "args": "%",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+^",
+                "key": "Shift+6",
+                "args": "^",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+&",
+                "key": "Shift+7",
+                "args": "&",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+*",
+                "key": "Shift+8",
+                "args": "*",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+(",
+                "key": "Shift+9",
+                "args": "(",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+)",
+                "key": "Shift+0",
+                "args": ")",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+'",
+                "key": "'",
+                "args": "'",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+\"",
+                "key": "Shift+'",
+                "args": "\"",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii++",
+                "key": "Shift+=",
+                "args": "+",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+,",
+                "key": ",",
+                "args": ",",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+-",
+                "key": "-",
+                "args": "-",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+.",
+                "key": ".",
+                "args": ".",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+/",
+                "key": "/",
+                "args": "/",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+0",
+                "key": "0",
+                "args": "0",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+1",
+                "key": "1",
+                "args": "1",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+2",
+                "key": "2",
+                "args": "2",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+3",
+                "key": "3",
+                "args": "3",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+4",
+                "key": "4",
+                "args": "4",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+5",
+                "key": "5",
+                "args": "5",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+6",
+                "key": "6",
+                "args": "6",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+7",
+                "key": "7",
+                "args": "7",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+8",
+                "key": "8",
+                "args": "8",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+9",
+                "key": "9",
+                "args": "9",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+:",
+                "key": "Shift+;",
+                "args": ":",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+;",
+                "key": ";",
+                "args": ";",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+<",
+                "key": "Shift+,",
+                "args": "<",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+=",
+                "key": "=",
+                "args": "=",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+>",
+                "key": "Shift+.",
+                "args": ">",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+?",
+                "key": "Shift+/",
+                "args": "?",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+A",
+                "key": "Shift+a",
+                "args": "A",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+B",
+                "key": "Shift+b",
+                "args": "B",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+C",
+                "key": "Shift+c",
+                "args": "C",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+D",
+                "key": "Shift+d",
+                "args": "D",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+E",
+                "key": "Shift+e",
+                "args": "E",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+F",
+                "key": "Shift+f",
+                "args": "F",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+G",
+                "key": "Shift+g",
+                "args": "G",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+H",
+                "key": "Shift+h",
+                "args": "H",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+I",
+                "key": "Shift+i",
+                "args": "I",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+J",
+                "key": "Shift+j",
+                "args": "J",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+K",
+                "key": "Shift+k",
+                "args": "K",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+L",
+                "key": "Shift+l",
+                "args": "L",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+M",
+                "key": "Shift+m",
+                "args": "M",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+N",
+                "key": "Shift+n",
+                "args": "N",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+O",
+                "key": "Shift+o",
+                "args": "O",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+P",
+                "key": "Shift+p",
+                "args": "P",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+Q",
+                "key": "Shift+q",
+                "args": "Q",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+R",
+                "key": "Shift+r",
+                "args": "R",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+S",
+                "key": "Shift+s",
+                "args": "S",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+T",
+                "key": "Shift+t",
+                "args": "T",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+U",
+                "key": "Shift+u",
+                "args": "U",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+V",
+                "key": "Shift+v",
+                "args": "V",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+W",
+                "key": "Shift+w",
+                "args": "W",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+X",
+                "key": "Shift+x",
+                "args": "X",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+Y",
+                "key": "Shift+y",
+                "args": "Y",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+Z",
+                "key": "Shift+z",
+                "args": "Z",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+[",
+                "key": "[",
+                "args": "[",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+\\",
+                "key": "\\",
+                "args": "\\",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+]",
+                "key": "]",
+                "args": "]",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+_",
+                "key": "Shift+-",
+                "args": "_",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+`",
+                "key": "`",
+                "args": "`",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+a",
+                "key": "a",
+                "args": "a",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+b",
+                "key": "b",
+                "args": "b",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+c",
+                "key": "c",
+                "args": "c",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+d",
+                "key": "d",
+                "args": "d",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+e",
+                "key": "e",
+                "args": "e",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+f",
+                "key": "f",
+                "args": "f",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+g",
+                "key": "g",
+                "args": "g",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+h",
+                "key": "h",
+                "args": "h",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+i",
+                "key": "i",
+                "args": "i",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+j",
+                "key": "j",
+                "args": "j",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+k",
+                "key": "k",
+                "args": "k",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+l",
+                "key": "l",
+                "args": "l",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+m",
+                "key": "m",
+                "args": "m",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+n",
+                "key": "n",
+                "args": "n",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+o",
+                "key": "o",
+                "args": "o",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+p",
+                "key": "p",
+                "args": "p",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+q",
+                "key": "q",
+                "args": "q",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+r",
+                "key": "r",
+                "args": "r",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+s",
+                "key": "s",
+                "args": "s",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+t",
+                "key": "t",
+                "args": "t",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+u",
+                "key": "u",
+                "args": "u",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+v",
+                "key": "v",
+                "args": "v",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+w",
+                "key": "w",
+                "args": "w",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+x",
+                "key": "x",
+                "args": "x",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+y",
+                "key": "y",
+                "args": "y",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+z",
+                "key": "z",
+                "args": "z",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+{",
+                "key": "Shift+[",
+                "args": "{",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+|",
+                "key": "Shift+\\",
+                "args": "|",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+}",
+                "key": "Shift+]",
+                "args": "}",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.sendAscii+~",
+                "key": "Shift+`",
+                "args": "~",
+                "when": "!searchInputBoxFocus && !findInputFocussed && !inCommandsPicker && !inQuickOpen && brightscript.isRemoteControlMode"
+            },
+            {
+                "command": "extension.brightscript.markLogOutput",
+                "key": "Ctrl+l",
+                "mac": "Ctrl+l"
+            },
+            {
+                "command": "extension.brightscript.clearLogOutput",
+                "key": "Ctrl+Alt+k",
+                "mac": "Ctrl+Option+k"
+            },
+            {
+                "command": "extension.brightscript.setOutputLogLevelFilter",
+                "key": "Win+Ctrl+l",
+                "mac": "Cmd+Ctrl+l"
+            },
+            {
+                "command": "extension.brightscript.setOutputIncludeFilter",
+                "key": "Win+Ctrl+i",
+                "mac": "Cmd+Ctrl+i"
+            },
+            {
+                "command": "extension.brightscript.setOutputExcludeFilter",
+                "key": "Win+Ctrl+x",
+                "mac": "Cmd+Ctrl+x"
+            }
+        ],
+        "problemPatterns": [
+            {
+                "name": "bsc",
+                "regexp": "^(.+?):(\\d+):(\\d+)(?:-(\\d+):(\\d+))?\\s*-\\s*(error|warning|info|hint)\\s+([a-zA-Z_\\-\\d]+):\\s*(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "code": 7,
+                "message": 8
+            }
+        ],
+        "problemMatchers": [
+            {
+                "name": "bsc",
+                "label": "BrighterScript problems",
+                "owner": "brightscript",
+                "source": "brightscript",
+                "applyTo": "allDocuments",
+                "fileLocation": [
+                    "relative",
+                    "${cwd}"
+                ],
+                "pattern": "$bsc"
+            },
+            {
+                "name": "bsc-watch",
+                "label": "BrighterScript problems (watch mode)",
+                "owner": "brightscript",
+                "source": "brs",
+                "applyTo": "allDocuments",
+                "fileLocation": [
+                    "relative",
+                    "${cwd}"
+                ],
+                "pattern": "$bsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "^\\[(?:\\d+|:|\\s|AM|PM)+\\]\\s*((File change detected\\.+\\s*Starting incremental compilation)|(Starting compilation in watch mode))\\.+"
+                    },
+                    "endsPattern": {
+                        "regexp": "^\\[(?:\\d+|:|\\s|AM|PM)+\\]\\s*(?:Compilation complete\\.|Found \\d+ errors?\\.)?\\s*Watching for file changes\\.+"
+                    }
+                }
+            },
+            {
+                "name": "bsc-watch-silent",
+                "label": "BrighterScript problems (watch mode) but don't emit any diagnostics",
+                "owner": "brightscript",
+                "source": "brs",
+                "applyTo": "allDocuments",
+                "pattern": {
+                    "regexp": "^neverMatchThisPattern_likeSeriously,weShouldNeverMatchAnything$"
+                },
+                "fileLocation": [
+                    "relative",
+                    "${cwd}"
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "^\\[(?:\\d+|:|\\s|AM|PM)+\\]\\s*((File change detected\\.+\\s*Starting incremental compilation)|(Starting compilation in watch mode))\\.+"
+                    },
+                    "endsPattern": {
+                        "regexp": "^\\[(?:\\d+|:|\\s|AM|PM)+\\]\\s*(?:Compilation complete\\.|Found \\d+ errors?\\.)?\\s*Watching for file changes\\.+"
+                    }
+                }
+            }
+        ]
+    },
+    "watch": {
+        "test": {
+            "extensions": "ts",
+            "patterns": [
+                "src"
+            ]
+        }
+    },
+    "mocha": {
+        "spec": "src/**/*.spec.ts",
+        "require": [
+            "source-map-support/register",
+            "ts-node/register"
+        ],
+        "fullTrace": true,
+        "watchExtensions": [
+            "ts"
+        ]
+    },
+    "nyc": {
+        "include": [
+            "src/**/!(*.spec).ts",
+            "webviews/**/!(*.spec).ts"
+        ],
+        "extension": [
+            ".ts"
+        ],
+        "require": [
+            "ts-node/register",
+            "source-map-support/register"
+        ],
+        "reporter": [
+            "text-summary",
+            "html"
+        ],
+        "sourceMap": true,
+        "instrument": true,
+        "check-coverage": true,
+        "lines": 5,
+        "statements": 5,
+        "functions": 5,
+        "branches": 5
+    },
+    "categories": [
+        "Formatters",
+        "Programming Languages",
+        "Debuggers",
+        "Snippets"
+    ]
+}
